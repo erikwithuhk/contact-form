@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import ContactForm from './ContactForm.jsx'
 
 class App extends Component {
   render() {
     return (
-      <h1>React is running</h1>
+      <ContactForm />
     );
   }
 }
