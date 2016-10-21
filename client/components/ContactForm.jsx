@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 class ContactForm extends Component {
   render() {
     return (
-      <section className="contact_section">
+      <section className="contact_section container">
         <div className="container">
-          <h2>Contact</h2>
+          <h2>Contact Erik</h2>
           <form
             className="contact-form"
             action="https://formspree.io/efjonsson@gmail.com"
