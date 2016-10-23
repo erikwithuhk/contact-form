@@ -11,6 +11,13 @@ class Contact {
            .then(response => contacts)
            .catch(err => err);
   }
+  static new({ name, email, message }) {
+    const id = Math.floor(Math.random() * 10) + 3;
+    const contact = new Contact({ id, name, email, message });
+    return request.get('http://localhost:8080')
+           .then(response => contact)
+           .catch(err => err);
+  }
   constructor({ id, name, email, message }) {
     this.id = id;
     this.name = name;
