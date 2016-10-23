@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import request from 'superagent';
 
 class ContactForm extends Component {
   constructor() {
@@ -19,6 +20,12 @@ class ContactForm extends Component {
   }
   handleSubmit(e) {
     e.preventDefault();
+    request.post('/api/v1/contacts').send(this.state)
+           .then((response) => {
+             if (response.status === 200) {
+               console.log('Contact created', response.body);
+             }
+           });
   }
   render() {
     return (
