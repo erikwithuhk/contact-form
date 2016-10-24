@@ -1,15 +1,22 @@
+const db = require('../config/db/db');
+const sql = require('../config/db/sqlProvider').messages;
 const request = require('superagent');
 
 class Message {
   static all() {
-    const messages = { messages: [
-      new Message({ id: 1, name: 'Erik', email: 'efjonsson@gmail.com', body: 'I want to hire you.' }),
-      new Message({ id: 2, name: 'Lichard', email: 'lichard@gmail.com', body: 'I love Omily.' }),
-      new Message({ id: 3, name: 'Joy', email: 'joy@gmail.com', body: 'What\' up?' }),
-    ] };
-    return request.get('http://localhost:8080')
-           .then(response => messages)
-           .catch(err => err);
+    // const messages = { messages: [
+    //   new Message({ id: 1, name: 'Erik', email: 'efjonsson@gmail.com', body: 'I want to hire you.' }),
+    //   new Message({ id: 2, name: 'Lichard', email: 'lichard@gmail.com', body: 'I love Omily.' }),
+    //   new Message({ id: 3, name: 'Joy', email: 'joy@gmail.com', body: 'What\' up?' }),
+    // ] };
+    // return request.get('http://localhost:8080')
+    //        .then(response => messages)
+    //        .catch(err => err);
+    console.log('Message All');
+    return db.map(sql.all, [], (row) => {
+      console.log(row);
+      return new Message(row);
+    });
   }
   static new({ name, email, body }) {
     const id = Math.floor(Math.random() * 10) + 3;
