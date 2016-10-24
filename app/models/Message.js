@@ -9,12 +9,13 @@ class Message {
   static find(id) {
     return db.one(sql.find, [id], row => new Message(row));
   }
-  static new({ name, email, body }) {
-    const id = Math.floor(Math.random() * 10) + 3;
-    const message = new Message({ id, name, email, body });
-    return request.get('http://localhost:8080')
-           .then(response => message)
-           .catch(err => err);
+  static create({ name, email, body }) {
+    console.log([name, email, body]);
+    return db.one(sql.create, [name, email, body], row => new Message(row));
+    // const message = new Message({ name, email, body });
+    // return request.get('http://localhost:8080')
+    //        .then(response => message)
+    //        .catch(err => err);
   }
   constructor({ id, name, email, body }) {
     this.id = id;

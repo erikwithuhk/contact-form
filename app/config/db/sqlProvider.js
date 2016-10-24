@@ -10,6 +10,8 @@ const sqlProvider = {
   messages: {
     all: sql('./sql/message/all.sql'),
     find: sql('./sql/message/find.sql'),
+    create: sql('./sql/message/create.sql'),
+    save: sql('./sql/message/save.sql'),
   },
 };
 
