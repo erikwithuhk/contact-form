@@ -7,7 +7,7 @@ class ContactForm extends Component {
     this.state = {
       name: '',
       email: '',
-      message: '',
+      body: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,18 +20,22 @@ class ContactForm extends Component {
   }
   handleSubmit(e) {
     e.preventDefault();
-    request.post('/api/v1/contacts').send(this.state)
+    request.post('/api/v1/messages').send(this.state)
            .then((response) => {
-             if (response.status === 200) {
-               console.log('Contact created', response.body);
+             const validationNode = document.querySelector('.form-validation-message');
+             if (response.status === 201) {
+               validationNode.textContent = 'Your message has been sent.';
+               return;
              }
+             validationNode.textContent = 'There was an error sending your message. Please try again.';
+             return;
            });
   }
   render() {
     return (
       <section className="contact_section container">
-        <div className="container">
-          <h2>Contact Erik</h2>
+        <h2>Contact Erik</h2>
+        <div className="contact-form-container">
           <form
             className="contact-form"
             onSubmit={this.handleSubmit}
@@ -54,15 +58,15 @@ class ContactForm extends Component {
             />
             <label htmlFor="message">Message</label>
             <textarea
-              name="message"
+              name="body"
               rows="4"
               cols="50"
               onChange={this.handleChange}
               value={this.state.message}
               required
             />
-            <input type="hidden" name="_subject" value="New message from your website" />
             <input className="submit" type="submit" name="submit" value="Email me" />
+            <p className="form-validation-message">&nbsp;</p>
           </form>
         </div>
       </section>

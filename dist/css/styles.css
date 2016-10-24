@@ -22,12 +22,9 @@ Resets
 }
 
 html,
-body {
+body,
+.root {
   height: 100%;
-}
-
-img {
-  width: 100%;
 }
 
 
@@ -53,6 +50,10 @@ input {
   color: #2c3e50;
 }
 
+body {
+  background-color: #3498DB;
+}
+
 p {
   margin-bottom: 1.3em;
 }
@@ -61,7 +62,6 @@ h1,
 h2,
 h3,
 h4 {
-  margin: 0.5em 0;
   font-weight: 700;
   line-height: 1.2;
 }
@@ -91,7 +91,6 @@ h4 {
 .container {
   max-width: 960px;
   margin: 0 auto;
-  padding: 3em 1em 0em;
 }
 
 
@@ -101,10 +100,21 @@ Contact
 ======================= */
 
 .contact_section {
-  background-color: #3498DB;
-  border-top: 1px solid #ccc;
   color: #fff;
-  padding-bottom: 1rem;
+  padding: 0 1rem;
+  height: 100%;
+}
+
+.contact_section h2 {
+  margin: 2.5rem 0 1rem;
+  text-align: center;
+}
+
+.contact-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100% - 6.375rem);
 }
 
 label,
@@ -123,19 +133,24 @@ label {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   color: #fff;
-  margin-top: 1em;
   padding: 0.5em 0;
 }
 
 input,
+textarea {
+  -webkit-appearance: none;
+  padding: 0.5em;
+}
+
+input[type=text],
+input[type=email],
 textarea {
   border: 1px solid #2c3e50;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  padding: 0.5em;
-  -webkit-appearance: none;
+  margin-bottom: 1rem;
 }
 
 textarea {
@@ -143,11 +158,20 @@ textarea {
 }
 
 .submit {
+  -webkit-appearance: none;
+  background-color: #fff;
+  border: 2px solid #e74c3c;
+  border-radius: 5px;
+  color: #e74c3c;
   cursor: pointer;
   display: block;
-  -webkit-appearance: none;
 }
 
-.alert {
-  text-align: center;
+.submit:hover {
+  background-color: #e74c3c;
+  color: #fff;
 }
+
+.form-validation-message {
+  text-align: center;
+  margin: 1rem auto;}

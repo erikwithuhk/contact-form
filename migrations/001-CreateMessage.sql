@@ -1,4 +1,4 @@
-\c contact_form_test
+\c contact_form
 
 CREATE TABLE messages (
   id SERIAL PRIMARY KEY,

@@ -1,6 +1,5 @@
 const db = require('../config/db/db');
 const sql = require('../config/db/sqlProvider').messages;
-const request = require('superagent');
 
 class Message {
   static all() {
