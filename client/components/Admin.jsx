@@ -10,6 +10,7 @@ class Admin extends Component {
     this.state = {
       messages: [],
     };
+    this.deleteMessage = this.deleteMessage.bind(this);
   }
   componentDidMount() {
     this.getMessages();
@@ -18,6 +19,11 @@ class Admin extends Component {
     request.get('/api/v1/messages')
            .then(response => this.setState({ messages: response.body }))
            .catch(err => err);
+  }
+  deleteMessage(id) {
+    request.del(`/api/v1/messages/${id}`)
+           .then(() => this.getMessages())
+           .catch(err => console.error(err));
   }
   renderMessageListItems() {
     return this.state.messages.map(message => (
@@ -28,6 +34,7 @@ class Admin extends Component {
         senderEmail={message.email}
         messageBody={message.body}
         messageSent={message.createdAt}
+        deleteMessage={this.deleteMessage}
       />
     ));
   }

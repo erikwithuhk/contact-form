@@ -187,6 +187,11 @@ textarea {
 Admin
 ======================= */
 
+.admin-container {
+  margin: 0 auto;
+  max-width: 960px;
+}
+
 .admin-header {
   color: #fff;
   margin: 1rem;
@@ -194,6 +199,7 @@ Admin
 }
 
 .message-list {
+  list-style-type: none;
   margin-bottom: 2rem;
 }
 
@@ -257,11 +263,26 @@ Media Queries
 ======================= */
 
 @media (min-width: 960px) {
+  .message-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .message-list-item {
+    border-left: 3px solid #2c3e50;
+    border-right: 3px solid #2c3e50;
+    border-radius: 5px;
+    flex-direction: column;
+    margin: 1%;
+    width: 31%;
+  }
+
   .message-buttons {
     background-color: #fff;
     border-radius: 5px;
     color: #e74c3c;
   }
+
   .message-buttons:hover {
     background-color: #e74c3c;
     color: #fff;

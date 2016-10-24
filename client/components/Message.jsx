@@ -7,9 +7,14 @@ const propTypes = {
   senderEmail: React.PropTypes.string,
   messageBody: React.PropTypes.string,
   messageSent: React.PropTypes.string,
+  deleteMessage: React.PropTypes.func,
 };
 
 class Message extends Component {
+  constructor() {
+    super();
+    this.handleDelete = this.handleDelete.bind(this);
+  }
   getDateString() {
     const timestamp = new Date(Date.parse(this.props.messageSent));
     const month = timestamp.getMonth() + 1;
@@ -22,6 +27,10 @@ class Message extends Component {
     const hours = timestamp.getHours() - 4;
     const minutes = timestamp.getMinutes();
     return minutes < 10 ? `${hours}:0${minutes}` : `${hours}:${minutes}`;
+  }
+  handleDelete(e) {
+    e.preventDefault();
+    this.props.deleteMessage(this.props.id);
   }
   render() {
     const dateString = this.getDateString();
@@ -38,10 +47,12 @@ class Message extends Component {
           <Icon name="clock-o" className="sent-icon" /> {timeString}
         </p>
         <p className="message-body">{this.props.messageBody}</p>
-        <button className="message-buttons update-button">
+        <button className="message-buttons update-button" onClick={this.handleUpdate}>
           <Icon name="pencil-square-o" /> Update
         </button>
-        <button className="message-buttons delete-button"><Icon name="trash-o" /> Delete</button>
+        <button className="message-buttons delete-button" onClick={this.handleDelete}>
+          <Icon name="trash-o" /> Delete
+        </button>
       </li>
     );
   }
