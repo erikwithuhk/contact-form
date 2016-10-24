@@ -9,6 +9,7 @@ function sql(file) {
 const sqlProvider = {
   messages: {
     all: sql('./sql/message/all.sql'),
+    find: sql('./sql/message/find.sql'),
   },
 };
 
