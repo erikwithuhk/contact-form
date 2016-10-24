@@ -10,12 +10,10 @@ class Message {
     return db.one(sql.find, [id], row => new Message(row));
   }
   static create({ name, email, body }) {
-    console.log([name, email, body]);
     return db.one(sql.create, [name, email, body], row => new Message(row));
-    // const message = new Message({ name, email, body });
-    // return request.get('http://localhost:8080')
-    //        .then(response => message)
-    //        .catch(err => err);
+  }
+  static destroy(id) {
+    return db.none(sql.delete, [id]);
   }
   constructor({ id, name, email, body }) {
     this.id = id;

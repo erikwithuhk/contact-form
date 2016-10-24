@@ -17,6 +17,12 @@ class MessageController {
            .then(response => res.status(201).json(response))
            .catch(err => err);
   }
+  static destroy(req, res) {
+    const { id } = req.params;
+    Message.destroy(id)
+           .then(response => res.status(204).json(response))
+           .catch(err => err);
+  }
 }
 
 module.exports = MessageController;
