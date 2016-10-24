@@ -22,6 +22,17 @@ class Message {
     this.body = body;
     this.createdAt = new Date();
   }
+  save() {
+    return db.one(sql.save, [this.id, this.name, this.email, this.body], row => new Message(row));
+  }
+  update(options) {
+    Object.keys(options).forEach((key) => {
+      if (key !== 'id') {
+        this[key] = options[key];
+      }
+    });
+    return this.save();
+  }
 }
 
 module.exports = Message;

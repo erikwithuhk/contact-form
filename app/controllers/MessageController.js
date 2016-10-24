@@ -17,6 +17,16 @@ class MessageController {
            .then(response => res.status(201).json(response))
            .catch(err => err);
   }
+  static update(req, res) {
+    const { id } = req.params;
+    Message.find(id)
+           .then((message) => {
+             message.update(req.body)
+                    .then(updatedMessage => res.status(200).json(updatedMessage))
+                    .catch(err => err);
+           })
+           .catch(err => err);
+  }
   static destroy(req, res) {
     const { id } = req.params;
     Message.destroy(id)
