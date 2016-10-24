@@ -23,7 +23,8 @@ Resets
 
 html,
 body,
-.root {
+.root,
+.app-container {
   height: 100%;
 }
 

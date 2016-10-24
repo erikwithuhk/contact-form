@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-import ContactForm from './ContactForm.jsx'
+
+const propTypes = {
+  children: React.PropTypes.element,
+};
 
 class App extends Component {
   render() {
     return (
-      <ContactForm />
+      <div className="app-container">
+        {this.props.children}
+      </div>
     );
   }
 }
+
+App.propTypes = propTypes;
 
 export default App;
