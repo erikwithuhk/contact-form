@@ -1,16 +1,16 @@
-const Contact = require('../models/Contact');
+const Message = require('../models/Message');
 
-class ContactController {
+class MessageController {
   static index(req, res) {
-    Contact.all()
+    Message.all()
            .then(response => res.status(200).json(response))
            .catch(err => err);
   }
   static create(req, res) {
-    Contact.new(req.body)
+    Message.new(req.body)
            .then(response => res.status(200).json(response))
            .catch(err => err);
   }
 }
 
-module.exports = ContactController;
+module.exports = MessageController;
