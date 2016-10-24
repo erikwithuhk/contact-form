@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Icon } from 'react-fa';
 
 const propTypes = {
   id: React.PropTypes.number,
@@ -30,8 +31,12 @@ class Message extends Component {
         <a className="message-sender" href={`mailto:${this.props.senderEmail}`} >
           {this.props.sender}
         </a>
-        <p className="message-date-sent">{dateString}</p>
-        <p className="message-time-sent">{timeString}</p>
+        <p className="message-date-sent">
+          <Icon name="calendar" className="sent-icon" /> {dateString}
+        </p>
+        <p className="message-time-sent">
+          <Icon name="clock-o" className="sent-icon" /> {timeString}
+        </p>
         <p className="message-body">{this.props.messageBody}</p>
       </li>
     );

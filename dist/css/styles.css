@@ -203,15 +203,29 @@ Admin
 
 .message-sender {
   color: #e74c3c;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.message-sender:hover {
+  color: #2c3e50;
 }
 
 .message-date-sent,
 .message-time-sent {
   color: #ccc;
+  font-size: 0.875em;
   margin: 0.25em 0;
+}
+
+.sent-icon {
+  display: inline-block;
+  margin-right: 0.25em;
+  text-align: center;
+  width: 1em;
 }
 
 .message-body {
   margin: 1em 0;
-}
