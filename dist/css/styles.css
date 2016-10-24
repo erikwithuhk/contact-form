@@ -188,3 +188,30 @@ Admin
   margin: 1rem;
   text-align: center;
 }
+
+.message-list {
+  margin-bottom: 2rem;
+}
+
+.message-list-item {
+  background-color: #fff;
+  border-top: 3px solid #2c3e50;
+  border-bottom: 3px solid #2c3e50;
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.message-sender {
+  color: #e74c3c;
+  font-size: 1.5rem;
+}
+
+.message-date-sent,
+.message-time-sent {
+  color: #ccc;
+  margin: 0.25em 0;
+}
+
+.message-body {
+  margin: 1em 0;
+}

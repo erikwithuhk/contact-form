@@ -27,11 +27,12 @@ class Message extends Component {
     const timeString = this.getTimeString();
     return (
       <li className="message-list-item">
-        <h3 className="message-sender">{this.props.sender}</h3>
-        <p className="message-sender-email">{this.props.senderEmail}</p>
-        <p className="message-body">{this.props.messageBody}</p>
+        <a className="message-sender" href={`mailto:${this.props.senderEmail}`} >
+          {this.props.sender}
+        </a>
         <p className="message-date-sent">{dateString}</p>
         <p className="message-time-sent">{timeString}</p>
+        <p className="message-body">{this.props.messageBody}</p>
       </li>
     );
   }
