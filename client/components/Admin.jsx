@@ -27,6 +27,7 @@ class Admin extends Component {
         sender={message.name}
         senderEmail={message.email}
         messageBody={message.body}
+        messageSent={message.createdAt}
       />
     ));
   }
@@ -34,6 +35,7 @@ class Admin extends Component {
     const messageListItems = this.renderMessageListItems();
     return (
       <div className="admin-container">
+        <h2 className="admin-header">Messages Admin</h2>
         <ul className="message-list">
           {messageListItems}
         </ul>

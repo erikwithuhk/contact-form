@@ -97,7 +97,7 @@ h4 {
 
 
 /* =======================
-Contact
+Contact Form
 ======================= */
 
 .contact_section {
@@ -176,3 +176,15 @@ textarea {
 .form-validation-message {
   text-align: center;
   margin: 1rem auto;}
+
+
+
+/* =======================
+Admin
+======================= */
+
+.admin-header {
+  color: #fff;
+  margin: 1rem;
+  text-align: center;
+}
