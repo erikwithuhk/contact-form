@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Icon } from 'react-fa';
+import MessageDetails from './MessageDetails.jsx';
+import MessageUpdateForm from './MessageUpdateForm.jsx';
 
 const propTypes = {
   id: React.PropTypes.number,
@@ -13,6 +15,11 @@ const propTypes = {
 class Message extends Component {
   constructor() {
     super();
+    this.state = {
+      updating: false,
+    };
+    this.toggleUpdating = this.toggleUpdating.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
   }
   getDateString() {
@@ -28,27 +35,50 @@ class Message extends Component {
     const minutes = timestamp.getMinutes();
     return minutes < 10 ? `${hours}:0${minutes}` : `${hours}:${minutes}`;
   }
+  getMessageDetails() {
+    if (this.state.updating === true) {
+      return (
+        <MessageUpdateForm
+          sender={this.props.sender}
+          senderEmail={this.props.senderEmail}
+          dateString={this.getDateString()}
+          timeString={this.getTimeString()}
+          messageBody={this.props.messageBody}
+        />
+      );
+    }
+    return (
+      <MessageDetails
+        sender={this.props.sender}
+        senderEmail={this.props.senderEmail}
+        dateString={this.getDateString()}
+        timeString={this.getTimeString()}
+        messageBody={this.props.messageBody}
+      />
+    );
+  }
+  toggleUpdating() {
+    if (this.state.updating) {
+      this.setState({ updating: false });
+    } else {
+      this.setState({ updating: true });
+    }
+  }
+  handleUpdate(e) {
+    e.preventDefault();
+    this.toggleUpdating();
+  }
   handleDelete(e) {
     e.preventDefault();
     this.props.deleteMessage(this.props.id);
   }
   render() {
-    const dateString = this.getDateString();
-    const timeString = this.getTimeString();
+    const messageDetails = this.getMessageDetails();
     return (
       <li className="message-list-item">
-        <a className="message-sender" href={`mailto:${this.props.senderEmail}`} >
-          {this.props.sender}
-        </a>
-        <p className="message-date-sent">
-          <Icon name="calendar" className="sent-icon" /> {dateString}
-        </p>
-        <p className="message-time-sent">
-          <Icon name="clock-o" className="sent-icon" /> {timeString}
-        </p>
-        <p className="message-body">{this.props.messageBody}</p>
+        {messageDetails}
         <button className="message-buttons update-button" onClick={this.handleUpdate}>
-          <Icon name="pencil-square-o" /> Update
+          <Icon name="pencil-square-o" /> {this.state.updating ? 'Save' : 'Update'}
         </button>
         <button className="message-buttons delete-button" onClick={this.handleDelete}>
           <Icon name="trash-o" /> Delete

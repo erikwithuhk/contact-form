@@ -84,8 +84,11 @@ h4 {
   font-size: 1.333em;
 }
 
-button {
+button,
+input,
+textarea {
   -webkit-appearance: none;
+  padding: 0.5em;
 }
 
 .clearfix {
@@ -139,12 +142,6 @@ label {
   border-bottom-right-radius: 0px;
   color: #fff;
   padding: 0.5em 0;
-}
-
-input,
-textarea {
-  -webkit-appearance: none;
-  padding: 0.5em;
 }
 
 input[type=text],
@@ -254,6 +251,16 @@ Admin
 
 .update-button {
   margin-right: 2%;
+}
+
+.update-form input,
+.update-form textarea {
+  border: 1px solid #2c3e50;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  margin-bottom: 1rem;
 }
 
 
