@@ -38,6 +38,10 @@ class Message extends Component {
           <Icon name="clock-o" className="sent-icon" /> {timeString}
         </p>
         <p className="message-body">{this.props.messageBody}</p>
+        <button className="message-buttons update-button">
+          <Icon name="pencil-square-o" /> Update
+        </button>
+        <button className="message-buttons delete-button"><Icon name="trash-o" /> Delete</button>
       </li>
     );
   }

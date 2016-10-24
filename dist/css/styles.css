@@ -84,6 +84,10 @@ h4 {
   font-size: 1.333em;
 }
 
+button {
+  -webkit-appearance: none;
+}
+
 .clearfix {
   overflow: auto;
   zoom: 1;
@@ -229,3 +233,37 @@ Admin
 
 .message-body {
   margin: 1em 0;
+}
+
+.message-buttons {
+  background-color: #e74c3c;
+  border: 2px solid #e74c3c;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.5em 1em;
+  width: 49%;
+  max-width: 15rem;
+}
+
+.update-button {
+  margin-right: 2%;
+}
+
+
+
+/* =======================
+Media Queries
+======================= */
+
+@media (min-width: 960px) {
+  .message-buttons {
+    background-color: #fff;
+    border-radius: 5px;
+    color: #e74c3c;
+  }
+  .message-buttons:hover {
+    background-color: #e74c3c;
+    color: #fff;
+  }
+}
