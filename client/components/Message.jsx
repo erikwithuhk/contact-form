@@ -9,6 +9,7 @@ const propTypes = {
   senderEmail: React.PropTypes.string,
   messageBody: React.PropTypes.string,
   messageSent: React.PropTypes.string,
+  updateMessage: React.PropTypes.func,
   deleteMessage: React.PropTypes.func,
 };
 
@@ -39,11 +40,13 @@ class Message extends Component {
     if (this.state.updating === true) {
       return (
         <MessageUpdateForm
+          id={this.props.id}
           sender={this.props.sender}
           senderEmail={this.props.senderEmail}
           dateString={this.getDateString()}
           timeString={this.getTimeString()}
           messageBody={this.props.messageBody}
+          handleUpdate={this.handleUpdate}
         />
       );
     }
@@ -54,6 +57,8 @@ class Message extends Component {
         dateString={this.getDateString()}
         timeString={this.getTimeString()}
         messageBody={this.props.messageBody}
+        toggleUpdating={this.toggleUpdating}
+        deleteMessage={this.props.deleteMessage}
       />
     );
   }
@@ -64,9 +69,15 @@ class Message extends Component {
       this.setState({ updating: true });
     }
   }
-  handleUpdate(e) {
-    e.preventDefault();
+  handleUpdate({ sender, senderEmail, messageBody }) {
     this.toggleUpdating();
+    const updates = {
+      id: this.props.id,
+      name: sender,
+      email: senderEmail,
+      body: messageBody,
+    };
+    this.props.updateMessage(updates);
   }
   handleDelete(e) {
     e.preventDefault();
@@ -77,12 +88,6 @@ class Message extends Component {
     return (
       <li className="message-list-item">
         {messageDetails}
-        <button className="message-buttons update-button" onClick={this.handleUpdate}>
-          <Icon name="pencil-square-o" /> {this.state.updating ? 'Save' : 'Update'}
-        </button>
-        <button className="message-buttons delete-button" onClick={this.handleDelete}>
-          <Icon name="trash-o" /> Delete
-        </button>
       </li>
     );
   }

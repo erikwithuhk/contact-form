@@ -10,6 +10,7 @@ class Admin extends Component {
     this.state = {
       messages: [],
     };
+    this.updateMessage = this.updateMessage.bind(this);
     this.deleteMessage = this.deleteMessage.bind(this);
   }
   componentDidMount() {
@@ -19,6 +20,12 @@ class Admin extends Component {
     request.get('/api/v1/messages')
            .then(response => this.setState({ messages: response.body }))
            .catch(err => err);
+  }
+  updateMessage({ id, name, email, body }) {
+    const updatedAt = new Date(Date.now());
+    const updates = { id, name, email, body, updatedAt };
+    request.patch(`/api/v1/messages/${id}`).send(updates)
+           .then(() => this.getMessages());
   }
   deleteMessage(id) {
     request.del(`/api/v1/messages/${id}`)
@@ -34,6 +41,7 @@ class Admin extends Component {
         senderEmail={message.email}
         messageBody={message.body}
         messageSent={message.createdAt}
+        updateMessage={this.updateMessage}
         deleteMessage={this.deleteMessage}
       />
     ));
