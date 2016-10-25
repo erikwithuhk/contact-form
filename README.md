@@ -2,6 +2,9 @@
 
 A simple contact form that posts messages to an admin CRM.
 
+- [Contact Form](http://contactform.erik-jonsson.com/)
+- [Admin CRM](http://contactform.erik-jonsson.com/#/admin)
+
 ## Installation
 
 ```bash
