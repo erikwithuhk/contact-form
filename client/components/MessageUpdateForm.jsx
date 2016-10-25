@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Icon } from 'react-fa';
 
 const propTypes = {
-  id: React.PropTypes.number,
   sender: React.PropTypes.string,
   senderEmail: React.PropTypes.string,
   messageBody: React.PropTypes.string,
@@ -28,7 +27,6 @@ class MessageUpdateForm extends Component {
   }
   handleUpdate(e) {
     e.preventDefault();
-    console.log(this.state);
     this.props.handleUpdate(this.state);
   }
   render() {

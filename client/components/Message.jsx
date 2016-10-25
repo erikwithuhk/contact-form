@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Icon } from 'react-fa';
 import MessageDetails from './MessageDetails.jsx';
 import MessageUpdateForm from './MessageUpdateForm.jsx';
 
