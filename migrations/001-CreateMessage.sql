@@ -5,6 +5,6 @@ CREATE TABLE messages (
   name VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   body TEXT NOT NULL,
-  created_at TIMESTAMP,
-  updated_at TIMESTAMP
+  created_at VARCHAR(255),
+  updated_at VARCHAR(255)
 );

@@ -20,20 +20,28 @@ class Message extends Component {
     };
     this.toggleUpdating = this.toggleUpdating.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
   }
   getDateString() {
-    const timestamp = new Date(Date.parse(this.props.messageSent));
+    const timestamp = new Date(parseInt(this.props.messageSent, 10));
     const month = timestamp.getMonth() + 1;
     const day = timestamp.getDate();
     const year = timestamp.getFullYear();
     return `${month}/${day}/${year}`;
   }
   getTimeString() {
-    const timestamp = new Date(Date.parse(this.props.messageSent));
-    const hours = timestamp.getHours() - 4;
+    const timestamp = new Date(parseInt(this.props.messageSent, 10));
+    const hours = timestamp.getHours();
+    let convertedHours;
+    let ampm;
+    if (hours > 12) {
+      convertedHours = hours - 12;
+      ampm = 'pm';
+    } else {
+      convertedHours = hours;
+      ampm = 'am';
+    }
     const minutes = timestamp.getMinutes();
-    return minutes < 10 ? `${hours}:0${minutes}` : `${hours}:${minutes}`;
+    return minutes < 10 ? `${convertedHours}:0${minutes}${ampm}` : `${convertedHours}:${minutes}${ampm}`;
   }
   getMessageDetails() {
     if (this.state.updating === true) {
@@ -51,6 +59,7 @@ class Message extends Component {
     }
     return (
       <MessageDetails
+        id={this.props.id}
         sender={this.props.sender}
         senderEmail={this.props.senderEmail}
         dateString={this.getDateString()}
@@ -77,10 +86,6 @@ class Message extends Component {
       body: messageBody,
     };
     this.props.updateMessage(updates);
-  }
-  handleDelete(e) {
-    e.preventDefault();
-    this.props.deleteMessage(this.props.id);
   }
   render() {
     const messageDetails = this.getMessageDetails();

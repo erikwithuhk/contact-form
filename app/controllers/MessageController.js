@@ -14,8 +14,8 @@ class MessageController {
   }
   static create(req, res) {
     const { name, email, body } = req.body;
-    const createdAt = new Date(Date.now());
-    const updatedAt = new Date(Date.now());
+    const createdAt = new Date(Date.now()).getTime();
+    const updatedAt = new Date(Date.now()).getTime();
     Message.create({ name, email, body, createdAt, updatedAt })
            .then(response => res.status(201).json(response))
            .catch(err => res.status(500).json(err));

@@ -28,7 +28,7 @@ class Message {
     });
   }
   update(options) {
-    this.updatedAt = new Date(Date.now());
+    this.updatedAt = new Date(Date.now()).getTime();
     Object.keys(options).forEach((key) => {
       if (key !== 'id') {
         this[key] = options[key];
