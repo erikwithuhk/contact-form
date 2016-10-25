@@ -29262,6 +29262,8 @@
 	    _this.state = {
 	      messages: []
 	    };
+	    _this.updateMessage = _this.updateMessage.bind(_this);
+	    _this.deleteMessage = _this.deleteMessage.bind(_this);
 	    return _this;
 	  }
 
@@ -29282,8 +29284,37 @@
 	      });
 	    }
 	  }, {
+	    key: 'updateMessage',
+	    value: function updateMessage(_ref) {
+	      var _this3 = this;
+
+	      var id = _ref.id;
+	      var name = _ref.name;
+	      var email = _ref.email;
+	      var body = _ref.body;
+
+	      var updatedAt = new Date(Date.now());
+	      var updates = { id: id, name: name, email: email, body: body, updatedAt: updatedAt };
+	      _superagent2.default.patch('/api/v1/messages/' + id).send(updates).then(function () {
+	        return _this3.getMessages();
+	      });
+	    }
+	  }, {
+	    key: 'deleteMessage',
+	    value: function deleteMessage(id) {
+	      var _this4 = this;
+
+	      _superagent2.default.del('/api/v1/messages/' + id).then(function () {
+	        return _this4.getMessages();
+	      }).catch(function (err) {
+	        return console.error(err);
+	      });
+	    }
+	  }, {
 	    key: 'renderMessageListItems',
 	    value: function renderMessageListItems() {
+	      var _this5 = this;
+
 	      return this.state.messages.map(function (message) {
 	        return _react2.default.createElement(_Message2.default, {
 	          key: message.id,
@@ -29291,7 +29322,9 @@
 	          sender: message.name,
 	          senderEmail: message.email,
 	          messageBody: message.body,
-	          messageSent: message.createdAt
+	          messageSent: message.createdAt,
+	          updateMessage: _this5.updateMessage,
+	          deleteMessage: _this5.deleteMessage
 	        });
 	      });
 	    }
@@ -29339,7 +29372,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactFa = __webpack_require__(245);
+	var _MessageDetails = __webpack_require__(245);
+
+	var _MessageDetails2 = _interopRequireDefault(_MessageDetails);
+
+	var _MessageUpdateForm = __webpack_require__(259);
+
+	var _MessageUpdateForm2 = _interopRequireDefault(_MessageUpdateForm);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29354,7 +29393,9 @@
 	  sender: _react2.default.PropTypes.string,
 	  senderEmail: _react2.default.PropTypes.string,
 	  messageBody: _react2.default.PropTypes.string,
-	  messageSent: _react2.default.PropTypes.string
+	  messageSent: _react2.default.PropTypes.string,
+	  updateMessage: _react2.default.PropTypes.func,
+	  deleteMessage: _react2.default.PropTypes.func
 	};
 
 	var Message = function (_Component) {
@@ -29363,13 +29404,20 @@
 	  function Message() {
 	    _classCallCheck(this, Message);
 
-	    return _possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (Message.__proto__ || Object.getPrototypeOf(Message)).call(this));
+
+	    _this.state = {
+	      updating: false
+	    };
+	    _this.toggleUpdating = _this.toggleUpdating.bind(_this);
+	    _this.handleUpdate = _this.handleUpdate.bind(_this);
+	    return _this;
 	  }
 
 	  _createClass(Message, [{
 	    key: 'getDateString',
 	    value: function getDateString() {
-	      var timestamp = new Date(Date.parse(this.props.messageSent));
+	      var timestamp = new Date(parseInt(this.props.messageSent, 10));
 	      var month = timestamp.getMonth() + 1;
 	      var day = timestamp.getDate();
 	      var year = timestamp.getFullYear();
@@ -29378,41 +29426,78 @@
 	  }, {
 	    key: 'getTimeString',
 	    value: function getTimeString() {
-	      var timestamp = new Date(Date.parse(this.props.messageSent));
-	      var hours = timestamp.getHours() - 4;
+	      var timestamp = new Date(parseInt(this.props.messageSent, 10));
+	      var hours = timestamp.getHours();
+	      var convertedHours = void 0;
+	      var ampm = void 0;
+	      if (hours > 12) {
+	        convertedHours = hours - 12;
+	        ampm = 'pm';
+	      } else {
+	        convertedHours = hours;
+	        ampm = 'am';
+	      }
 	      var minutes = timestamp.getMinutes();
-	      return minutes < 10 ? hours + ':0' + minutes : hours + ':' + minutes;
+	      return minutes < 10 ? convertedHours + ':0' + minutes + ampm : convertedHours + ':' + minutes + ampm;
+	    }
+	  }, {
+	    key: 'getMessageDetails',
+	    value: function getMessageDetails() {
+	      if (this.state.updating === true) {
+	        return _react2.default.createElement(_MessageUpdateForm2.default, {
+	          id: this.props.id,
+	          sender: this.props.sender,
+	          senderEmail: this.props.senderEmail,
+	          dateString: this.getDateString(),
+	          timeString: this.getTimeString(),
+	          messageBody: this.props.messageBody,
+	          handleUpdate: this.handleUpdate
+	        });
+	      }
+	      return _react2.default.createElement(_MessageDetails2.default, {
+	        id: this.props.id,
+	        sender: this.props.sender,
+	        senderEmail: this.props.senderEmail,
+	        dateString: this.getDateString(),
+	        timeString: this.getTimeString(),
+	        messageBody: this.props.messageBody,
+	        toggleUpdating: this.toggleUpdating,
+	        deleteMessage: this.props.deleteMessage
+	      });
+	    }
+	  }, {
+	    key: 'toggleUpdating',
+	    value: function toggleUpdating() {
+	      if (this.state.updating) {
+	        this.setState({ updating: false });
+	      } else {
+	        this.setState({ updating: true });
+	      }
+	    }
+	  }, {
+	    key: 'handleUpdate',
+	    value: function handleUpdate(_ref) {
+	      var sender = _ref.sender;
+	      var senderEmail = _ref.senderEmail;
+	      var messageBody = _ref.messageBody;
+
+	      this.toggleUpdating();
+	      var updates = {
+	        id: this.props.id,
+	        name: sender,
+	        email: senderEmail,
+	        body: messageBody
+	      };
+	      this.props.updateMessage(updates);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var dateString = this.getDateString();
-	      var timeString = this.getTimeString();
+	      var messageDetails = this.getMessageDetails();
 	      return _react2.default.createElement(
 	        'li',
 	        { className: 'message-list-item' },
-	        _react2.default.createElement(
-	          'a',
-	          { className: 'message-sender', href: 'mailto:' + this.props.senderEmail },
-	          this.props.sender
-	        ),
-	        _react2.default.createElement(
-	          'p',
-	          { className: 'message-date-sent' },
-	          _react2.default.createElement(_reactFa.Icon, { name: 'spin' }),
-	          ' ',
-	          dateString
-	        ),
-	        _react2.default.createElement(
-	          'p',
-	          { className: 'message-time-sent' },
-	          timeString
-	        ),
-	        _react2.default.createElement(
-	          'p',
-	          { className: 'message-body' },
-	          this.props.messageBody
-	        )
+	        messageDetails
 	      );
 	    }
 	  }]);
@@ -29426,6 +29511,121 @@
 
 /***/ },
 /* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactFa = __webpack_require__(246);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var propTypes = {
+	  id: _react2.default.PropTypes.number,
+	  sender: _react2.default.PropTypes.string,
+	  senderEmail: _react2.default.PropTypes.string,
+	  dateString: _react2.default.PropTypes.string,
+	  timeString: _react2.default.PropTypes.string,
+	  messageBody: _react2.default.PropTypes.string,
+	  toggleUpdating: _react2.default.PropTypes.func,
+	  deleteMessage: _react2.default.PropTypes.func
+	};
+
+	var MessageDetails = function (_Component) {
+	  _inherits(MessageDetails, _Component);
+
+	  function MessageDetails() {
+	    _classCallCheck(this, MessageDetails);
+
+	    var _this = _possibleConstructorReturn(this, (MessageDetails.__proto__ || Object.getPrototypeOf(MessageDetails)).call(this));
+
+	    _this.handleUpdate = _this.handleUpdate.bind(_this);
+	    _this.handleDelete = _this.handleDelete.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(MessageDetails, [{
+	    key: 'handleUpdate',
+	    value: function handleUpdate(e) {
+	      e.preventDefault();
+	      this.props.toggleUpdating();
+	    }
+	  }, {
+	    key: 'handleDelete',
+	    value: function handleDelete(e) {
+	      e.preventDefault();
+	      this.props.deleteMessage(this.props.id);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'a',
+	          { className: 'message-sender', href: 'mailto:' + this.props.senderEmail },
+	          this.props.sender
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          { className: 'message-date-sent' },
+	          _react2.default.createElement(_reactFa.Icon, { name: 'calendar', className: 'sent-icon' }),
+	          ' ',
+	          this.props.dateString
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          { className: 'message-time-sent' },
+	          _react2.default.createElement(_reactFa.Icon, { name: 'clock-o', className: 'sent-icon' }),
+	          ' ',
+	          this.props.timeString
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          { className: 'message-body' },
+	          this.props.messageBody
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { className: 'message-buttons update-button', onClick: this.handleUpdate },
+	          _react2.default.createElement(_reactFa.Icon, { name: 'pencil-square-o' }),
+	          ' Update'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { className: 'message-buttons delete-button', onClick: this.handleDelete },
+	          _react2.default.createElement(_reactFa.Icon, { name: 'trash-o' }),
+	          ' Delete'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return MessageDetails;
+	}(_react.Component);
+
+	MessageDetails.propTypes = propTypes;
+
+	exports.default = MessageDetails;
+
+/***/ },
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29442,13 +29642,13 @@
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
 
-	__webpack_require__(246);
+	__webpack_require__(247);
 
-	var _Icon = __webpack_require__(256);
+	var _Icon = __webpack_require__(257);
 
 	var _Icon2 = _interopRequireDefault(_Icon);
 
-	var _IconStack = __webpack_require__(257);
+	var _IconStack = __webpack_require__(258);
 
 	var _IconStack2 = _interopRequireDefault(_IconStack);
 
@@ -29457,13 +29657,12 @@
 	exports.IconStack = _IconStack2['default'];
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 247 */,
 /* 248 */,
 /* 249 */,
 /* 250 */,
@@ -29472,7 +29671,8 @@
 /* 253 */,
 /* 254 */,
 /* 255 */,
-/* 256 */
+/* 256 */,
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29643,7 +29843,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29772,6 +29972,127 @@
 
 	exports['default'] = IconStack;
 	module.exports = exports['default'];
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactFa = __webpack_require__(246);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var propTypes = {
+	  sender: _react2.default.PropTypes.string,
+	  senderEmail: _react2.default.PropTypes.string,
+	  messageBody: _react2.default.PropTypes.string,
+	  handleUpdate: _react2.default.PropTypes.func
+	};
+
+	var MessageUpdateForm = function (_Component) {
+	  _inherits(MessageUpdateForm, _Component);
+
+	  function MessageUpdateForm(props) {
+	    _classCallCheck(this, MessageUpdateForm);
+
+	    var _this = _possibleConstructorReturn(this, (MessageUpdateForm.__proto__ || Object.getPrototypeOf(MessageUpdateForm)).call(this, props));
+
+	    _this.state = {
+	      sender: _this.props.sender,
+	      senderEmail: _this.props.senderEmail,
+	      messageBody: _this.props.messageBody
+	    };
+	    _this.handleChange = _this.handleChange.bind(_this);
+	    _this.handleUpdate = _this.handleUpdate.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(MessageUpdateForm, [{
+	    key: 'handleChange',
+	    value: function handleChange(e) {
+	      var key = e.target.name;
+	      var newState = {};
+	      newState[key] = e.target.value;
+	      this.setState(newState);
+	    }
+	  }, {
+	    key: 'handleUpdate',
+	    value: function handleUpdate(e) {
+	      e.preventDefault();
+	      this.props.handleUpdate(this.state);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'update-form' },
+	        _react2.default.createElement(
+	          'label',
+	          { htmlFor: 'sender' },
+	          'Name'
+	        ),
+	        _react2.default.createElement('input', {
+	          name: 'sender',
+	          className: 'message-sender-input',
+	          onChange: this.handleChange,
+	          value: this.state.sender
+	        }),
+	        _react2.default.createElement(
+	          'label',
+	          { htmlFor: 'senderEmail' },
+	          'Email'
+	        ),
+	        _react2.default.createElement('input', {
+	          name: 'senderEmail',
+	          className: 'message-email-input',
+	          onChange: this.handleChange,
+	          value: this.state.senderEmail
+	        }),
+	        _react2.default.createElement(
+	          'label',
+	          { htmlFor: 'messageBody' },
+	          'Message'
+	        ),
+	        _react2.default.createElement('textarea', {
+	          name: 'messageBody',
+	          className: 'message-body-input',
+	          onChange: this.handleChange,
+	          value: this.state.messageBody
+	        }),
+	        _react2.default.createElement(
+	          'button',
+	          { className: 'message-buttons update-button', onClick: this.handleUpdate },
+	          _react2.default.createElement(_reactFa.Icon, { name: 'pencil-square-o' }),
+	          ' Save'
+	        )
+	      );
+	    }
+	  }]);
+
+	  return MessageUpdateForm;
+	}(_react.Component);
+
+	MessageUpdateForm.propTypes = propTypes;
+
+	exports.default = MessageUpdateForm;
 
 /***/ }
 /******/ ]);
